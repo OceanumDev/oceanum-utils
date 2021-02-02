@@ -75,17 +75,31 @@ def makeFileCallback():
         pass
     refreshTree()
 
+def renameFileCallback():
+    selected = tree.item(tree.focus())
+    try:
+        newname = sd.askstring(title="AquaFiles", prompt="New Name (include extension):")
+        os.rename(selected["values"][0], newname)
+    except FileExistsError:
+        tkm.showerror(title="Error", message="File already exists!")
+    except PermissionError:
+        tkm.showerror(title="Error", message="Access denied.")
+    except TypeError:
+        pass
+
 button_open = tk.Button(window, text="Open", width=125, command=openCallback)
 button_delete = tk.Button(window, text="Delete", width=125, command=deleteCallback)
 button_new_folder = tk.Button(window, text="New Folder", width=125, command=makeFolderCallback)
 button_new_file = tk.Button(window, text="New File", width=125, command=makeFileCallback)
+button_rename = tk.Button(window, text="Rename", width=125, command=renameFileCallback)
 button_refresh = tk.Button(window, text="Refresh", width=125, command=refreshTree)
 
 button_open.pack(side=tk.TOP, anchor="ne", padx=10, pady=10)
 button_delete.pack(side=tk.TOP, anchor="ne", padx=10)
 button_new_folder.pack(side=tk.TOP, anchor="ne", padx=10, pady=10)
 button_new_file.pack(side=tk.TOP, anchor="ne", padx=10)
-button_refresh.pack(side=tk.TOP, anchor="ne", padx=10, pady=10)
+button_rename.pack(side=tk.TOP, anchor="ne", padx=10, pady=10)
+button_refresh.pack(side=tk.TOP, anchor="ne", padx=10)
 tree.bind("<Double-Button-1>", openCallback)
 
 refreshTree()
